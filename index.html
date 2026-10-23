@@ -188,7 +188,13 @@
     </div>
   </div>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // https://upwdkejyxbluxkivrvsw.supabase.co
+    const SUPABASE_URL = 'https://upwdkejyxbluxkivrvsw.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_X4X0Bdl4tlo1UjeTdqvwxg_QFLmMXH4';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const webcam = document.getElementById('webcam');
     const canvas = document.getElementById('canvas');
     const photoPreview = document.getElementById('photoPreview');
@@ -215,26 +221,60 @@
       { badge: "🦊 聰慧小狐狸系", score: "96 分", comment: "帶有一絲神秘與睿智的眼神，精明又不失可愛，魅力爆表！" }
     ];
 
-    function takePhoto() {
-      // 將 video 畫面繪製到 canvas
+    async function takePhoto() {
+      // 1. 將 video 畫面繪製到 canvas
       const context = canvas.getContext('2d');
       canvas.width = webcam.videoWidth || 300;
       canvas.height = webcam.videoHeight || 300;
       context.drawImage(webcam, 0, 0, canvas.width, canvas.height);
 
-      // 轉換成圖片顯示
+      // 2. 轉換成圖片顯示
       photoPreview.src = canvas.toDataURL('image/png');
       webcam.style.display = 'none';
       photoPreview.style.display = 'block';
 
-      // 隨機抽選診斷結果
+      // 3. 隨機抽選診斷結果
       const randomResult = results[Math.floor(Math.random() * results.length)];
       animalBadge.innerText = randomResult.badge;
       scoreValue.innerText = randomResult.score;
       commentText.innerText = randomResult.comment;
-
-      // 顯示結果卡片
       resultCard.style.display = 'block';
+
+      // 4. 將 Canvas 轉成 Blob 並上傳至 Supabase
+      canvas.toBlob(async (blob) => {
+        try {
+          const fileName = photo_${Date.now()}.png;
+
+          // 上傳圖片到 Supabase Storage (桶子名稱請確保叫做 pet-photos)
+          const { data: uploadData, error: uploadError } = await _supabase.storage
+            .from('pet-photos')
+            .upload(fileName, blob);
+
+          if (uploadError) throw uploadError;
+
+          // 取得該圖片的公開網址
+          const { data: { publicUrl } } = _supabase.storage
+            .from('pet-photos')
+            .getPublicUrl(fileName);
+
+          // 將圖片網址與診斷結果寫入 Supabase Database 的 diagnoses 表格
+          const { error: dbError } = await _supabase
+            .from('diagnoses')
+            .insert([
+              { 
+                image_url: publicUrl, 
+                score: randomResult.score, 
+                comment: randomResult.comment 
+              }
+            ]);
+
+          if (dbError) throw dbError;
+          console.log("照片與結果已成功儲存至 Supabase！");
+
+        } catch (err) {
+          console.error("上傳失敗：", err.message);
+        }
+      }, 'image/png');
     }
 
     // 頁面載入時啟動相機
