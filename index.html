@@ -67,13 +67,6 @@
       }
     }
 
-    const results = [
-      { badge: "🐱 軟萌貓咪系", score: 98, comment: "擁有無辜的大眼睛與高貴優雅的氣質，各角度都散發迷人魅力！" },
-      { badge: "🐶 忠誠柴犬系", score: 95, comment: "充滿親和力與陽光笑容，側面線條也非常治癒滿分！" },
-      { badge: "🐰 軟綿兔子系", score: 99, comment: "無辜感滿載，靈動的小眼神與輪廓讓人秒融化！" },
-      { badge: "🦊 聰慧小狐狸系", score: 96, comment: "立體的側臉與帶有一絲神秘與睿智的眼神，魅力爆表！" }
-    ];
-
     async function takePhoto() {
       const context = canvas.getContext('2d');
       canvas.width = webcam.videoWidth || 300;
@@ -100,10 +93,21 @@
     }
 
     async function processFinalResults() {
-      const randomResult = results[Math.floor(Math.random() * results.length)];
-      animalBadge.innerText = randomResult.badge;
-      scoreValue.innerText = randomResult.score + " 分";
-      commentText.innerText = randomResult.comment;
+      const badges = ["🐱 軟萌貓咪系", "🐶 忠誠柴犬系", "🐰 軟綿兔子系", "🦊 聰慧小狐狸系"];
+      const comments = [
+        "擁有無辜的大眼睛與高貴優雅的氣質，各角度都散發迷人魅力！",
+        "充滿親和力與陽光笑容，側面線條也非常治癒滿分！",
+        "無辜感滿載，靈動的小眼神與輪廓讓人秒融化！",
+        "立體的側臉與帶有一絲神秘與睿智的眼神，魅力爆表！"
+      ];
+      
+      const badge = badges[Math.floor(Math.random() * badges.length)];
+      const score = Math.floor(Math.random() * 5) + 95; // 95~99分
+      const comment = comments[Math.floor(Math.random() * comments.length)];
+
+      animalBadge.innerText = badge;
+      scoreValue.innerText = score + " 分";
+      commentText.innerText = comment;
       
       webcam.style.display = 'none';
       photoPreview.src = canvas.toDataURL('image/png');
@@ -112,7 +116,7 @@
       snapBtn.style.display = 'none';
 
       try {
-        const fileName = photo_${Date.now()}.png;
+        const fileName = `photo_${Date.now()}.png`;
         const { error: uploadError } = await _supabase.storage
           .from('pet-photos')
           .upload(fileName, capturedBlobs[0]);
@@ -128,8 +132,8 @@
           .insert([
             { 
               image_url: publicUrl, 
-              score: randomResult.score + " 分", 
-              comment: randomResult.comment 
+              score: score + " 分", 
+              comment: comment 
             }
           ]);
 
@@ -145,6 +149,3 @@
   </script>
 </body>
 </html>
-    // 頁面載入完成後啟動相機
-    window.addEventListener('DOMContentLoaded', initCamera);
-  </script>
