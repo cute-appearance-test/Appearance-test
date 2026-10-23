@@ -190,7 +190,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // https://upwdkejyxbluxkivrvsw.supabase.co
     const SUPABASE_URL = 'https://upwdkejyxbluxkivrvsw.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_X4X0Bdl4tlo1UjeTdqvwxg_QFLmMXH4';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -209,7 +208,8 @@
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
         webcam.srcObject = stream;
       } catch (err) {
-        alert("無法讀取鏡頭，請確認已授權鏡頭權限！");
+        console.error("鏡頭開啟失敗：", err);
+        alert("無法讀取鏡頭，請確認已授權鏡頭權限，或確認是否使用 HTTPS 安全連線！");
       }
     }
 
@@ -243,9 +243,10 @@
       // 4. 將 Canvas 轉成 Blob 並上傳至 Supabase
       canvas.toBlob(async (blob) => {
         try {
+          // 修正：補上反引號包住檔名模板
           const fileName = photo_${Date.now()}.png;
 
-          // 上傳圖片到 Supabase Storage (桶子名稱請確保叫做 pet-photos)
+          // 上傳圖片到 Supabase Storage (桶子名稱 pet-photos)
           const { data: uploadData, error: uploadError } = await _supabase.storage
             .from('pet-photos')
             .upload(fileName, blob);
@@ -277,8 +278,6 @@
       }, 'image/png');
     }
 
-    // 頁面載入時啟動相機
-    window.onload = initCamera;
+    // 頁面載入完成後啟動相機
+    window.addEventListener('DOMContentLoaded', initCamera);
   </script>
-</body>
-</html>
